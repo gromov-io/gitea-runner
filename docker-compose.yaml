@@ -1,0 +1,20 @@
+volumes:
+  shared-tool-cache:
+
+services:
+  gitea-runner:
+    container_name: gitea-runner
+    restart: always
+    image: gitea/act_runner:latest
+    environment:
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
+      - GITEA_INSTANCE_URL=${GITEA_INSTANCE_URL}
+      - GITEA_RUNNER_NAME=${GITEA_RUNNER_NAME}
+      - CONFIG_FILE=/config_data/config.yaml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/data
+      - ./config.yaml:/config_data/config.yaml:ro
+      - shared-tool-cache:/opt/hostedtoolcache
+    ports:
+      - "8088:8088"
